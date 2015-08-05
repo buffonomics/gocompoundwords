@@ -7,8 +7,9 @@ import (
 )
 
 type Node struct {
-	letter     rune
-	children   []Node
+	letter rune
+	//parent     *Node
+	children   []*Node
 	isTerminal bool
 }
 
@@ -24,21 +25,21 @@ func (this *Node) HasChild(letter rune) bool {
 func (this *Node) FindChild(letter rune) *Node {
 	for _, child := range this.children {
 		if child.letter == letter {
-			return &child
+			return child
 		}
 	}
 	return nil
 }
 
 func (this *Node) AddChild(letter rune, isTerminal bool) *Node {
-	newnode := Node{
+	newnode := &Node{
 		letter:     letter,
 		isTerminal: isTerminal,
 		//children:   make([]Node, 3),
 	}
 
 	this.children = append(this.children, newnode)
-	return &newnode
+	return newnode
 }
 
 func (this *Node) Display(out *bytes.Buffer, indent int) {
@@ -61,5 +62,5 @@ func (this *Node) Displayf(indent int) {
 	for _, c := range this.children {
 		c.Displayf(indent + 1)
 	}
-	fmt.Print("\n")
+	//fmt.Print("\n")
 }

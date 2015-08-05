@@ -12,7 +12,7 @@ type Trie struct {
 
 func NewTrie() *Trie {
 	var trie = Trie{
-		root: Node{letter: rune(0), children: make([]Node, 1)},
+		root: Node{letter: rune(0)},
 	}
 
 	return &trie
@@ -31,7 +31,7 @@ func (this *Trie) Insert(word string) {
 		if existing == nil {
 			fmt.Printf(" '%c' ", l)
 			currentNode = currentNode.AddChild(l, false) //insert new node
-			fmt.Printf(" '%c' ", l)
+			fmt.Printf(" '%c' ", currentNode.letter)
 		} else {
 			fmt.Printf(" \\'%c' ", l)
 			currentNode = existing //use existing node
