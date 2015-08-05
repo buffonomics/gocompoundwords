@@ -1,9 +1,7 @@
 package trie
 
 import (
-	"bytes"
 	"fmt"
-	"strconv"
 )
 
 type Node struct {
@@ -42,17 +40,6 @@ func (this *Node) AddChild(letter rune, isTerminal bool) *Node {
 	return newnode
 }
 
-func (this *Node) Display(out *bytes.Buffer, indent int) {
-	out.WriteString(strconv.Itoa(indent))
-	out.WriteRune(this.letter)
-	out.WriteString("-->\n")
-
-	for _, c := range this.children {
-		c.Display(out, indent+1)
-	}
-	out.WriteString("\n")
-}
-
 func (this *Node) Displayf(indent int) {
 	for i := 0; i < indent; i++ {
 		fmt.Print("...")
@@ -62,5 +49,4 @@ func (this *Node) Displayf(indent int) {
 	for _, c := range this.children {
 		c.Displayf(indent + 1)
 	}
-	//fmt.Print("\n")
 }

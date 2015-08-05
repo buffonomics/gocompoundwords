@@ -11,6 +11,7 @@ import (
 
 func main() {
 	fmt.Println("NodePrime Quiz")
+	start := time.Now()
 	//Load strings from file into Array
 	words, err := util.LoadStrings("word.list")
 	if err != nil {
@@ -20,7 +21,6 @@ func main() {
 
 	//Begin Operation
 	var longestCompoundWord string
-	start := time.Now()
 
 	//sort array of lines
 	sort.Sort(util.ByLength(words))
@@ -28,10 +28,8 @@ func main() {
 	//Init Trie
 	trie := trie.NewTrie()
 
-	testwords := []string{"Howdy", "Yam", "Orange", "How", "Sundry", "Suntan", "saxophone", "YamOranges", "howyam", "superfly"}
-	sort.Sort(util.ByLength(testwords))
-	longestCompoundWord = trie.LongestCompoundWord(testwords)
-	//trie.Display()
+	longestCompoundWord = trie.LongestCompoundWord(words)
+	//trie.DisplayToConsole()
 
 	elapsed := time.Since(start)
 	log.Printf("Longest Compound Word: %s", longestCompoundWord)

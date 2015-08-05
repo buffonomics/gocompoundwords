@@ -1,7 +1,6 @@
 package trie
 
 import (
-	"bytes"
 	"container/list"
 	"fmt"
 	"strings"
@@ -22,23 +21,22 @@ func NewTrie() *Trie {
 func (this *Trie) Insert(word string) {
 
 	currentNode := &this.root
-	//fmt.Print(" Inserting ")
 	word = strings.ToLower(word)
 
 	for _, l := range word {
 
 		if existing := currentNode.FindChild(l); existing == nil {
 			currentNode = currentNode.AddChild(l, false) //insert new node
-			fmt.Printf(" '%c' ", currentNode.letter)
+			//fmt.Printf(" '%c' ", currentNode.letter)
 		} else {
 
 			currentNode = existing //use existing node
-			fmt.Printf(" \\'%c' ", l)
+			//fmt.Printf(" \\'%c' ", l)
 		}
 	}
 
 	currentNode.isTerminal = true
-	fmt.Print("\n")
+	//fmt.Print("\n")
 }
 
 func (this *Trie) FindAllPrefixes(word string) []string {
@@ -108,8 +106,8 @@ func (this *Trie) LongestCompoundWord(words []string) string {
 
 	for e := queue.Front(); e != nil; e = e.Next() {
 		pair := e.Value.(CompoundQueueData)
-		fmt.Println(pair)
-		//shorting list as we run to conserve memory
+		//fmt.Println(pair)
+		//shorting make-shift queue as we run to conserve memory....and to act like a queue.
 		if prev := e.Prev(); prev != nil {
 			queue.Remove(prev)
 		}
@@ -128,13 +126,7 @@ func (this *Trie) LongestCompoundWord(words []string) string {
 	return longestWord
 }
 
-func (this *Trie) Display() string {
-	var out bytes.Buffer
+func (this *Trie) DisplayToConsole() {
 	fmt.Println("\n Displaying Tree...\n")
 	this.root.Displayf(0)
-	//out.Flush()
-	output := out.String()
-	fmt.Printf("%s \n", output)
-
-	return output
 }
