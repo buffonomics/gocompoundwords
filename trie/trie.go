@@ -26,9 +26,8 @@ func (this *Trie) Insert(word string) {
 	word = strings.ToLower(word)
 
 	for i, l := range word {
-		existing := currentNode.FindChild(l)
 
-		if existing == nil {
+		if existing := currentNode.FindChild(l); existing == nil {
 			fmt.Printf(" '%c' ", l)
 			currentNode = currentNode.AddChild(l, false) //insert new node
 			fmt.Printf(" '%c' ", currentNode.letter)
@@ -43,6 +42,41 @@ func (this *Trie) Insert(word string) {
 			fmt.Print("\n")
 		}
 	}
+}
+
+func (this *Trie) FindAllPrefixes(word string) []string {
+	var prefixrunes []rune
+	var prefixes []string
+
+	currentNode := &this.root
+
+	for _, l := range word {
+
+		if existing := currentNode.FindChild(l); existing == nil {
+			return prefixes
+		} else {
+			currentNode = existing //use existing node
+		}
+
+		prefixrunes = append(prefixrunes, currentNode.letter)
+
+		if currentNode.isTerminal == true {
+			prefixes = append(prefixes, string(prefixrunes))
+		}
+
+		//If End of word
+		//if i == size-1 {
+		//	currentNode.isTerminal = true
+		//	fmt.Print("\n")
+		//}
+	}
+
+	return prefixes
+}
+
+func (this *Trie) LongestCompoundWord() string {
+	var prefixQueue []string
+
 }
 
 func (this *Trie) Display() string {
