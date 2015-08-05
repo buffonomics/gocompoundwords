@@ -27,9 +27,13 @@ func main() {
 
 	//Init Trie
 	trie := trie.NewTrie()
+
 	trie.Insert("Howdy")
+	trie.Insert("yam")
+	trie.Insert("orange")
 	trie.Insert("How")
 	trie.Insert("Sundry")
+	trie.Insert("Suntan")
 	trie.Insert("Saxophone")
 	trie.Insert("foobar")
 	trie.Display()
