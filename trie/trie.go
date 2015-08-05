@@ -65,10 +65,25 @@ func (this *Trie) FindAllPrefixes(word string) []string {
 	return prefixes
 }
 
+func (this *Trie) HasWord(word string) bool {
+
+	currentNode := &this.root
+
+	for _, l := range word {
+
+		if existing := currentNode.FindChild(l); existing == nil {
+			return false
+		} else {
+			currentNode = existing //use existing node
+		}
+	}
+
+	return currentNode.isTerminal
+}
+
 type CompoundQueueData struct {
 	word   string
 	suffix string
-	length int
 }
 
 func (this *Trie) LongestCompoundWord(words []string) string {
@@ -82,20 +97,30 @@ func (this *Trie) LongestCompoundWord(words []string) string {
 		word = strings.ToLower(word)
 		prefixes := this.FindAllPrefixes(word)
 		for _, prefix := range prefixes {
-			queue.PushBack(CompoundQueueData{word: word, suffix: prefix, length: len(word)})
+			queue.PushBack(CompoundQueueData{word: word, suffix: strings.Replace(word, prefix, "", -1)})
 		}
 		this.Insert(word)
 	}
 
 	//Processing
 	longestWord := ""
-	//maxLength := 0
+	maxLength := 0
 
 	for e := queue.Front(); e != nil; e = e.Next() {
-		fmt.Println(e.Value.(CompoundQueueData))
+		pair := e.Value.(CompoundQueueData)
+		fmt.Println(pair)
 		//shorting list as we run to conserve memory
-		if prev := e.Prev; prev != nil {
-			queue.remove(prev)
+		if prev := e.Prev(); prev != nil {
+			queue.Remove(prev)
+		}
+
+		if this.HasWord(pair.suffix) && len(pair.word) > maxLength {
+			longestWord = pair.word
+		} else {
+			prefixes := this.FindAllPrefixes(pair.suffix)
+			for _, prefix := range prefixes {
+				queue.PushBack(CompoundQueueData{word: pair.word, suffix: strings.Replace(pair.suffix, prefix, "", -1)})
+			}
 		}
 
 	}
