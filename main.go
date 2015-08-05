@@ -3,18 +3,24 @@ package main
 import (
 	"./trie"
 	"./util"
+	"flag"
 	"log"
 	"time"
 )
 
 func main() {
 	log.Printf("NodePrime Compound-word Detector by Iyobo Eki \n")
+
+	//Determine input data file
+	datafile := flag.String("file", "word.list", "Path to a file containing new-line seperated strings")
+	flag.Parse()
+
 	start := time.Now()
 
 	//Load data from file into Array
-	words, err := util.LoadStrings("word.list")
+	words, err := util.LoadStrings(*datafile)
 	if err != nil {
-		log.Fatalf("LoadStrings: %s", err)
+		log.Fatalf("%s", err)
 		panic(err)
 	}
 
