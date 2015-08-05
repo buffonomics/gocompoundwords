@@ -6,10 +6,12 @@ import (
 	"strings"
 )
 
+//A Trie specialized for compound-word combination detection.
 type Trie struct {
 	root Node
 }
 
+//Create a new Trie
 func NewTrie() *Trie {
 	var trie = Trie{
 		root: Node{letter: rune(0)},
@@ -18,7 +20,10 @@ func NewTrie() *Trie {
 	return &trie
 }
 
-func (this *Trie) Insert(word string) {
+//Insert a word into the Trie.
+//As at this current implementaton, this is a private method.
+//Case-insensitive.
+func (this *Trie) insert(word string) {
 
 	currentNode := &this.root
 	word = strings.ToLower(word)
@@ -39,6 +44,8 @@ func (this *Trie) Insert(word string) {
 	//fmt.Print("\n")
 }
 
+//Find all prefixes within this trie that relate to the given word or phrase.
+//Case-insensitive.
 func (this *Trie) FindAllPrefixes(word string) []string {
 	var prefixrunes []rune
 	var prefixes []string
@@ -63,9 +70,12 @@ func (this *Trie) FindAllPrefixes(word string) []string {
 	return prefixes
 }
 
+//Does this trie contain the given word?
+//Case-insensitive
 func (this *Trie) HasWord(word string) bool {
 
 	currentNode := &this.root
+	word = strings.ToLower(word)
 
 	for _, l := range word {
 
@@ -79,18 +89,20 @@ func (this *Trie) HasWord(word string) bool {
 	return currentNode.isTerminal
 }
 
-type CompoundQueueData struct {
+// Data object for holding suffix pairs for compound-word detection
+type CompoundQueuePair struct {
 	word   string
 	suffix string
 }
 
-func (this *Trie) LongestCompoundWord(words []string) string {
+//Process the given list of words and determine the longest, complete, compound word there-in
+func (this *Trie) DeriveLongestCompoundWord(words []string) string {
 	queue := list.New()
 
 	//Insertion-loop
 	for _, word := range words {
 		word = strings.ToLower(word)
-		this.Insert(word)
+		this.insert(word)
 	}
 
 	/*
@@ -101,7 +113,7 @@ func (this *Trie) LongestCompoundWord(words []string) string {
 		lword := strings.ToLower(word)
 		prefixes := this.FindAllPrefixes(lword)
 		for _, prefix := range prefixes {
-			queue.PushBack(CompoundQueueData{word: word, suffix: strings.Replace(lword, prefix, "", 1)})
+			queue.PushBack(CompoundQueuePair{word: word, suffix: strings.Replace(lword, prefix, "", 1)})
 		}
 
 	}
@@ -111,7 +123,7 @@ func (this *Trie) LongestCompoundWord(words []string) string {
 	maxLength := 0
 
 	for e := queue.Front(); e != nil; e = e.Next() {
-		pair := e.Value.(CompoundQueueData)
+		pair := e.Value.(CompoundQueuePair)
 		//fmt.Println(pair)
 		//shorting make-shift queue as we run to conserve memory....and to act like a queue.
 		if prev := e.Prev(); prev != nil {
@@ -125,7 +137,7 @@ func (this *Trie) LongestCompoundWord(words []string) string {
 		} else {
 			prefixes := this.FindAllPrefixes(pair.suffix)
 			for _, prefix := range prefixes {
-				queue.PushBack(CompoundQueueData{word: pair.word, suffix: strings.Replace(pair.suffix, prefix, "", 1)})
+				queue.PushBack(CompoundQueuePair{word: pair.word, suffix: strings.Replace(pair.suffix, prefix, "", 1)})
 			}
 		}
 	}
@@ -133,6 +145,7 @@ func (this *Trie) LongestCompoundWord(words []string) string {
 	return longestCompoundWord
 }
 
+//Display the content of this Trie
 func (this *Trie) DisplayToConsole() {
 	fmt.Println("\n Displaying Tree...\n")
 	this.root.Displayf(0)
