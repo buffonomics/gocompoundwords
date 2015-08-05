@@ -5,7 +5,6 @@ import (
 	"./util"
 	"fmt"
 	"log"
-	"sort"
 	"time"
 )
 
@@ -21,9 +20,6 @@ func main() {
 
 	//Begin Operation
 	var longestCompoundWord string
-
-	//sort array of lines
-	sort.Sort(util.ByLength(words))
 
 	//Init Trie
 	trie := trie.NewTrie()

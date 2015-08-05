@@ -87,21 +87,27 @@ type CompoundQueueData struct {
 func (this *Trie) LongestCompoundWord(words []string) string {
 	queue := list.New()
 
-	//TODO: Instead of enforcing sorting externally, Ensure insertion is seperate from initial compound queue population.
-	//Sorting just adds more uneccessary time complexity, as I can easily just do a 2n run.
-
-	//Insertion
+	//Insertion-loop
 	for _, word := range words {
 		word = strings.ToLower(word)
-		prefixes := this.FindAllPrefixes(word)
-		for _, prefix := range prefixes {
-			queue.PushBack(CompoundQueueData{word: word, suffix: strings.Replace(word, prefix, "", -1)})
-		}
 		this.Insert(word)
 	}
 
-	//Processing
-	longestWord := ""
+	/*
+		Initial suffix extraction loop. Done here So I don't need to sort the data first, hence
+		reducing the time complexity and increasing the speed of the algorithm.
+	*/
+	for _, word := range words {
+		lword := strings.ToLower(word)
+		prefixes := this.FindAllPrefixes(lword)
+		for _, prefix := range prefixes {
+			queue.PushBack(CompoundQueueData{word: word, suffix: strings.Replace(lword, prefix, "", 1)})
+		}
+
+	}
+
+	//Further Processing
+	longestCompoundWord := ""
 	maxLength := 0
 
 	for e := queue.Front(); e != nil; e = e.Next() {
@@ -113,17 +119,16 @@ func (this *Trie) LongestCompoundWord(words []string) string {
 		}
 
 		if this.HasWord(pair.suffix) && len(pair.word) > maxLength {
-			longestWord = pair.word
+			longestCompoundWord = pair.word
 		} else {
 			prefixes := this.FindAllPrefixes(pair.suffix)
 			for _, prefix := range prefixes {
 				queue.PushBack(CompoundQueueData{word: pair.word, suffix: strings.Replace(pair.suffix, prefix, "", -1)})
 			}
 		}
-
 	}
 
-	return longestWord
+	return longestCompoundWord
 }
 
 func (this *Trie) DisplayToConsole() {
