@@ -120,10 +120,12 @@ func (this *Trie) LongestCompoundWord(words []string) string {
 
 		if this.HasWord(pair.suffix) && len(pair.word) > maxLength {
 			longestCompoundWord = pair.word
+			maxLength = len(longestCompoundWord)
+			//fmt.Println(pair)
 		} else {
 			prefixes := this.FindAllPrefixes(pair.suffix)
 			for _, prefix := range prefixes {
-				queue.PushBack(CompoundQueueData{word: pair.word, suffix: strings.Replace(pair.suffix, prefix, "", -1)})
+				queue.PushBack(CompoundQueueData{word: pair.word, suffix: strings.Replace(pair.suffix, prefix, "", 1)})
 			}
 		}
 	}
