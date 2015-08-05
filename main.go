@@ -28,14 +28,9 @@ func main() {
 	//Init Trie
 	trie := trie.NewTrie()
 
-	trie.Insert("Howdy")
-	trie.Insert("yam")
-	trie.Insert("orange")
-	trie.Insert("How")
-	trie.Insert("Sundry")
-	trie.Insert("Suntan")
-	trie.Insert("Saxophone")
-	trie.Insert("foobar")
+	testwords := []string{"Howdy", "Yam", "Orange", "How", "Sundry", "Suntan", "saxophone", "YamOrange", "howyam"}
+	sort.Sort(util.ByLength(testwords))
+	longestCompoundWord = trie.LongestCompoundWord(testwords)
 	trie.Display()
 
 	elapsed := time.Since(start)

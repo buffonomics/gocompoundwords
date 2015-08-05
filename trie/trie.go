@@ -2,6 +2,7 @@ package trie
 
 import (
 	"bytes"
+	"container/list"
 	"fmt"
 	"strings"
 )
@@ -21,11 +22,10 @@ func NewTrie() *Trie {
 func (this *Trie) Insert(word string) {
 
 	currentNode := &this.root
-	size := len(word)
 	fmt.Print(" Inserting ")
 	word = strings.ToLower(word)
 
-	for i, l := range word {
+	for _, l := range word {
 
 		if existing := currentNode.FindChild(l); existing == nil {
 			fmt.Printf(" '%c' ", l)
@@ -35,13 +35,10 @@ func (this *Trie) Insert(word string) {
 			fmt.Printf(" \\'%c' ", l)
 			currentNode = existing //use existing node
 		}
-
-		//If End of word
-		if i == size-1 {
-			currentNode.isTerminal = true
-			fmt.Print("\n")
-		}
 	}
+
+	currentNode.isTerminal = true
+	fmt.Print("\n")
 }
 
 func (this *Trie) FindAllPrefixes(word string) []string {
@@ -63,20 +60,38 @@ func (this *Trie) FindAllPrefixes(word string) []string {
 		if currentNode.isTerminal == true {
 			prefixes = append(prefixes, string(prefixrunes))
 		}
-
-		//If End of word
-		//if i == size-1 {
-		//	currentNode.isTerminal = true
-		//	fmt.Print("\n")
-		//}
 	}
 
 	return prefixes
 }
 
-func (this *Trie) LongestCompoundWord() string {
-	var prefixQueue []string
+type CompoundQueueData struct {
+	word   string
+	prefix string
+	length int
+}
 
+func (this *Trie) LongestCompoundWord(words []string) string {
+	queue := list.New()
+
+	//Insertion
+	for _, word := range words {
+		prefixes := this.FindAllPrefixes(word)
+		for _, prefix := range prefixes {
+			queue.PushBack(CompoundQueueData{word: word, prefix: prefix, length: len(word)})
+		}
+		this.Insert(word)
+	}
+
+	//Processing
+	longestWord := ""
+	//maxLength := 0
+
+	for e := queue.Front(); e != nil; e = e.Next() {
+		fmt.Println(e.Value.(CompoundQueueData))
+	}
+
+	return longestWord
 }
 
 func (this *Trie) Display() string {
