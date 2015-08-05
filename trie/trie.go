@@ -22,18 +22,18 @@ func NewTrie() *Trie {
 func (this *Trie) Insert(word string) {
 
 	currentNode := &this.root
-	fmt.Print(" Inserting ")
+	//fmt.Print(" Inserting ")
 	word = strings.ToLower(word)
 
 	for _, l := range word {
 
 		if existing := currentNode.FindChild(l); existing == nil {
-			fmt.Printf(" '%c' ", l)
 			currentNode = currentNode.AddChild(l, false) //insert new node
 			fmt.Printf(" '%c' ", currentNode.letter)
 		} else {
-			fmt.Printf(" \\'%c' ", l)
+
 			currentNode = existing //use existing node
+			fmt.Printf(" \\'%c' ", l)
 		}
 	}
 
@@ -67,18 +67,22 @@ func (this *Trie) FindAllPrefixes(word string) []string {
 
 type CompoundQueueData struct {
 	word   string
-	prefix string
+	suffix string
 	length int
 }
 
 func (this *Trie) LongestCompoundWord(words []string) string {
 	queue := list.New()
 
+	//TODO: Instead of enforcing sorting externally, Ensure insertion is seperate from initial compound queue population.
+	//Sorting just adds more uneccessary time complexity, as I can easily just do a 2n run.
+
 	//Insertion
 	for _, word := range words {
+		word = strings.ToLower(word)
 		prefixes := this.FindAllPrefixes(word)
 		for _, prefix := range prefixes {
-			queue.PushBack(CompoundQueueData{word: word, prefix: prefix, length: len(word)})
+			queue.PushBack(CompoundQueueData{word: word, suffix: prefix, length: len(word)})
 		}
 		this.Insert(word)
 	}
@@ -89,6 +93,11 @@ func (this *Trie) LongestCompoundWord(words []string) string {
 
 	for e := queue.Front(); e != nil; e = e.Next() {
 		fmt.Println(e.Value.(CompoundQueueData))
+		//shorting list as we run to conserve memory
+		if prev := e.Prev; prev != nil {
+			queue.remove(prev)
+		}
+
 	}
 
 	return longestWord
