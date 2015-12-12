@@ -3,7 +3,7 @@
 ## What is it?:
 Given a file with a list of words like "word.list", this go program will find the longest, case-insensitive, compound-word in the list, which is also a concatenation of other sub-words that exist in the list.
 
-No 3rd party libraries are used.
+No 3rd party go libraries are used.
 
 ### Time complexity: O(nlogn) 
 
