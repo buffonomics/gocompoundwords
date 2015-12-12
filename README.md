@@ -5,6 +5,8 @@ Given a file with a list of words like "word.list", this go program will find th
 
 No 3rd party libraries are used.
 
+### Time complexity: O(nlogn) 
+
 ## How to Run
 **You do not need to change your GOPATH to be able to run these commands.**
 
