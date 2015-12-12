@@ -1,11 +1,14 @@
 # Natural Language Processing: The Longest Compound Word
 
-## What is it?:
+### What is it?
 Given a file with a list of words like "word.list", this go program will find the longest, case-insensitive, compound-word in the list, which is also a concatenation of other sub-words that exist in the list.
 
+Solved by implementing and populating a Trie data structure.
 No 3rd party go libraries are used.
 
-### Time complexity: O(nlogn) 
+### Time complexity 
+Insertion: O(nlogn)
+Lookup: O(n) worstcase
 
 ## How to Run
 **You do not need to change your GOPATH to be able to run these commands.**
