@@ -1,4 +1,4 @@
-# Longest Compound Word
+# Natural Language Processing: The Longest Compound Word
 
 ## What is it?:
 Given a file with a list of words like "word.list", this go program will find the longest, case-insensitive, compound-word in the list, which is also a concatenation of other sub-words that exist in the list.
