@@ -6,10 +6,6 @@ Given a file with a list of words like "word.list", this go program will find th
 Solved by implementing and populating a Trie data structure.
 No 3rd party go libraries are used.
 
-### Time complexity 
-Insertion: O(nlogn)
-Lookup: O(n) worstcase
-
 ## How to Run
 **You do not need to change your GOPATH to be able to run these commands.**
 
